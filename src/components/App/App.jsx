@@ -1,6 +1,6 @@
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import React, { Component } from "react";
+import { useState } from "react";
 import { AppStyled } from "./App.styled";
 import { FetchMaterials } from "services/api";
 import { Searchbar } from "components/Searchbar/Searchbar";
@@ -9,20 +9,19 @@ import CustomModal from "components/Modal/Modal";
 import { Button } from "components/Button/Button";
 import Loader from "components/Loader/Loader";
 
-class App extends Component {
-  state = {
-    searchQuery: "",
-    images: [],
-    page: 1,
-    selectedImage: null,
-    alt: null,
-    isLoading: false,
-    isLastPage: false,
-    status: "idle",
-    totalHits: null,
-  };
+const App = () => {
 
-  async componentDidUpdate(prevProps, prevState) {
+const [searchQuery, setSearchQuery] = useState("");
+const [images, setImages] = useState([]);
+const [page, setPage] = useState(1);
+const [selectedImage, setSelectedImage] = useState(null);
+const [alt, setAlt] = useState(null);
+const [isLoading, setIsLoading] = useState(false);
+const [isLastPage, setIsLastPage] = useState(false);
+const [status, setStatus] = useState("idle");
+const [totalHits, setTotalHits] = useState(null);
+
+ componentDidUpdate(prevProps, prevState) {
     const { page, searchQuery } = this.state;
     if (prevState.searchQuery !== searchQuery || prevState.page !== page) {
       this.setState({ status: "pending" });
