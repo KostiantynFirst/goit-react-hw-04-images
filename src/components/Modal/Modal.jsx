@@ -1,5 +1,5 @@
-import React from 'react';
-import { Component } from 'react';
+import React, { useEffect } from 'react';
+import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 import { Overlay, ModalStyled } from './Modal.styled';
@@ -7,57 +7,58 @@ import Spiner from 'components/Loader/Loader';
 
 const modalRoot = document.querySelector('#modal-root');
 
-export default class CustomModal extends Component {
-  static  = {
-    selectedImage: PropTypes.string,
-    tags: PropTypes.string,
-    onClose: PropTypes.func,
+export default function CustomModal ({ selectedImage, tags, onClose }) {
+
+const [isLoading, setIsLoading] = useState(true)
+
+useEffect (() => {
+  const image = new Image();
+  image.src = selectedImage;
+  image.onload = () => {
+    setIsLoading(false);
   };
 
-  state = {
-    isLoading: true,
-  };
-
-  componentDidMount() {
-    const { selectedImage } = this.props;
-    const image = new Image();
-    image.src = selectedImage;
-    image.onload = () => {
-      this.setState({ isLoading: false });
-    };
+  return () => {
+    setIsLoading(true);
   }
 
-  componentWillUnmount() {
-    this.setState({ isLoading: true }); 
-  }
+}, [selectedImage])
 
-  handleKeyDown = e => {
+  const handleKeyDown = e => {
     if (e.code === 'Escape') {
-      this.props.onClose();
+      onClose();
     }
   };
 
-  handleBackdropClick = e => {
+  (() => {
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+})();
+
+  const handleBackdropClick = e => {
     if (e.target === e.currentTarget) {
-      this.props.onClose();
+      onClose();
     }
   };
-  render() {
-    const { selectedImage, tags } = this.props;
-    const { isLoading } = this.state;
 
-
-    return createPortal(
-      <Overlay onClick={this.handleBackdropClick}>
-        {isLoading ? (
-          <Spiner /> // Show the spinner while the image is loading
-        ) : (
-          <ModalStyled>
-            <img src={selectedImage} alt={tags} />
-          </ModalStyled>
-        )}
-      </Overlay>,
-      modalRoot
-    );
-  }
+return createPortal(
+    <Overlay onClick={handleBackdropClick} >
+      {isLoading ? (
+        <Spiner /> // Show the spinner while the image is loading
+      ) : (
+        <ModalStyled>
+          <img src={selectedImage} alt={tags} />
+        </ModalStyled>
+      )}
+    </Overlay>,
+    modalRoot
+  );
 }
+
+CustomModal.propTypes  = {
+  selectedImage: PropTypes.string.isRequired,
+  tags: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired,
+};
