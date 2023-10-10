@@ -48,6 +48,7 @@ useEffect (() => {
     }
   };
 
+  
   fetchdata();
 }, [page, searchQuery, status]);
 
