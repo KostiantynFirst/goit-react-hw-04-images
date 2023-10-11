@@ -23,11 +23,9 @@ const [totalHits, setTotalHits] = useState(null);
 
 useEffect (() => {
 
-  
-  if (searchQuery !== '' && page > 0) {
-    setStatus('pending');
+  if (searchQuery === '') {
     return;
-  }  
+  }
 
 const fetchdata = async () => {
 
@@ -55,7 +53,7 @@ const fetchdata = async () => {
 
   
   fetchdata();
-}, [page, searchQuery, status]);
+}, [page, searchQuery]);
 
   const handleFormSubmit = (searchQuery) => {
     if (searchQuery === '') {
