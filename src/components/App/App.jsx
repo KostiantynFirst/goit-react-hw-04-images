@@ -36,13 +36,13 @@ const fetchdata = async () => {
       setImages((prevImages) => [...prevImages, ...imagesHits]);
       setTotalHits(imageData.total);
 
-      if (page > 1) {
-        const CARD_HEIGHT = 300;
-        window.scrollBy({
-          top: CARD_HEIGHT * 2,
-          behavior: "smooth",
-        });
-      }
+      // if (page > 1) {
+      //   const CARD_HEIGHT = 300;
+      //   window.scrollBy({
+      //     top: CARD_HEIGHT * 2,
+      //     behavior: "smooth",
+      //   });
+      // }
 
       setStatus('resolved');
     } catch (error) {
@@ -54,6 +54,16 @@ const fetchdata = async () => {
   
   fetchdata();
 }, [page, searchQuery]);
+
+useEffect(() => {
+  if (page > 1) {
+    const CARD_HEIGHT = 300;
+    window.scrollBy({
+      top: CARD_HEIGHT * 2,
+      behavior: 'smooth',
+    });
+  }
+}, [images, page])
 
   const handleFormSubmit = (searchQuery) => {
     if (searchQuery === '') {
