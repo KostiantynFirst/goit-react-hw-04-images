@@ -20,12 +20,16 @@ const [alt, setAlt] = useState(null);
 const [status, setStatus] = useState("idle");
 const [totalHits, setTotalHits] = useState(null);
 
+
 useEffect (() => {
 
-  if (status === 'idle') return;
-  // setStatus('pending');
+  
+  if (searchQuery !== '' && page > 0) {
+    setStatus('pending');
+    return;
+  }  
 
-  const fetchdata = async () => {
+const fetchdata = async () => {
 
     try {
       const imageData = await FetchMaterials(searchQuery, page);
@@ -33,7 +37,6 @@ useEffect (() => {
        
       setImages((prevImages) => [...prevImages, ...imagesHits]);
       setTotalHits(imageData.total);
-      setStatus('resolved');
 
       if (page > 1) {
         const CARD_HEIGHT = 300;
@@ -43,7 +46,7 @@ useEffect (() => {
         });
       }
 
-      
+      setStatus('resolved');
     } catch (error) {
       toast.error(`Sorry something went wrong. ${error.message}`);
       setStatus('rejected');
@@ -54,18 +57,18 @@ useEffect (() => {
   fetchdata();
 }, [page, searchQuery, status]);
 
-  const handleFormSubmit = (searchQueryInput) => {
-    if (searchQueryInput === searchQuery) {
+  const handleFormSubmit = (searchQuery) => {
+    if (searchQuery === '') {
       toast.warning('Please enter a search query')
       return;
     }
 
-    setSearchQuery(searchQueryInput);
+    setSearchQuery(searchQuery);
     setPage(1);
     setImages([]);
-    // setStatus('idle');
-    setAlt(null);
-    setSelectedImage(null);
+    setStatus('pending');
+    // setAlt(null);
+    // setSelectedImage(null);
 
   }
 
@@ -76,7 +79,7 @@ useEffect (() => {
 
   const loadMore = () => {
     setPage((prevPage) => prevPage + 1);
-    // setStatus('pending');
+    setStatus('pending');
   };
 
   const closeModal = () => {
