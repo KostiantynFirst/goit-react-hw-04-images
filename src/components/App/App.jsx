@@ -32,19 +32,16 @@ const fetchdata = async () => {
     try {
       const imageData = await FetchMaterials(searchQuery, page);
       const imagesHits = imageData.hits;
+      const total = imageData.totalHits;
        
       setImages((prevImages) => [...prevImages, ...imagesHits]);
       setTotalHits(imageData.total);
-
-      // if (page > 1) {
-      //   const CARD_HEIGHT = 300;
-      //   window.scrollBy({
-      //     top: CARD_HEIGHT * 2,
-      //     behavior: "smooth",
-      //   });
-      // }
-
       setStatus('resolved');
+
+      if(page === 1) {
+        toast.success(`Hooray! We found ${total} images`);
+      }
+
     } catch (error) {
       toast.error(`Sorry something went wrong. ${error.message}`);
       setStatus('rejected');
@@ -75,8 +72,8 @@ useEffect(() => {
     setPage(1);
     setImages([]);
     setStatus('pending');
-    // setAlt(null);
-    // setSelectedImage(null);
+    setAlt(null);
+    setSelectedImage(null);
 
   }
 
