@@ -15,7 +15,6 @@ const [searchQuery, setSearchQuery] = useState("");
 const [images, setImages] = useState([]);
 const [page, setPage] = useState(1);
 const [selectedImage, setSelectedImage] = useState(null);
-// const [loading, setLoading] = useState(false);
 const [alt, setAlt] = useState(null);
 const [status, setStatus] = useState("idle");
 const [totalHits, setTotalHits] = useState(null);
@@ -39,11 +38,11 @@ const fetchdata = async () => {
       setStatus('resolved');
 
       if(page === 1 && total !== 0) {
-        toast.success(`Hooray! We found ${total} images`);
+        toast.success(`We found ${total} images`);
       }
 
       if(total === 0) {
-        toast.error('Oops! Something has gone wrong. Try again!');
+        toast.error('Something has gone wrong. Try again!');
         return;
        }
 
