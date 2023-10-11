@@ -10,8 +10,7 @@ try {
       const res = await axios.get(
         `?q=${searchQuery}&page=${page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`
       );
-
-    return res.data;
+  return res.data;
 
       }  
     catch (error) {
