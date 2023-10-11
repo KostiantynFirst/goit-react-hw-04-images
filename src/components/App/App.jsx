@@ -38,9 +38,14 @@ const fetchdata = async () => {
       setTotalHits(imageData.total);
       setStatus('resolved');
 
-      if(page === 1) {
+      if(page === 1 && total !== 0) {
         toast.success(`Hooray! We found ${total} images`);
       }
+
+      if(total === 0) {
+        toast.error('Oops! Something has gone wrong. Try again!');
+        return;
+       }
 
     } catch (error) {
       toast.error(`Sorry something went wrong. ${error.message}`);
